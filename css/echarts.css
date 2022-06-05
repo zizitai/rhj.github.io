@@ -1,0 +1,27 @@
+#导航栏echarts {
+	font-size: 18px;
+	/* font-style: italic; */
+	border: 1px solid #000000;
+	/* 边框样式 */
+
+	font-weight: bold;
+	background-color: #e3e3e3;
+}
+
+#mainECharts {
+	text-align: center;
+	/* 居中对齐 */
+	background-color: #eae4d1;
+	/* 背景颜色 */
+	/* font-family: "times new roman"; */
+	margin: 0 auto;
+	/* 居中对齐 */
+	
+ 	width: 700px;
+	height:450px; 
+	
+/* 	max-width: 70%;
+	 max-height: 80%; */
+/* 	 width: 90%;
+	 	height:80%; */
+}

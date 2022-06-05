@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://js.arcgis.com/4.23/esri/themes/light/main.css">
+    <script src="https://js.arcgis.com/4.23/"></script>
+    <title>view-Popup-code</title>
+    <style>
+        html,
+        body,
+        #viewDiv {
+            padding: 0;
+            margin: 0;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+ 
+<body>
+<script src="./js/网页导航条.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="./css/headerstyle.css" />
+    <script>
+        require([
+            "esri/config", "esri/Map", "esri/views/MapView",
+            "esri/tasks/Locator", "esri/layers/GeoJSONLayer",
+			"esri/views/layers/support/FeatureEffect"
+        ], function (esriConfig, Map, MapView, Locator, GeoJSONLayer, FeatureEffect) {
+			const url =
+			  "./data/test2.json";
+			const geojsonLayer = new GeoJSONLayer({
+			  url: url
+			});
+            const map = new Map({
+                basemap: "hybrid" ,// Basemap layer service
+				layers: [geojsonLayer]
+            });
+            const view = new MapView({
+                map: map,
+                center: [112, 31], // Longitude, latitude 中国中部
+                zoom: 7, // Zoom level
+                container: "viewDiv" // Div element
+            });
+            // const geojsonlayer = new GeoJSONLayer({
+            //     url: "./data/test.json",
+            // });
+            // map.add(geojsonlayer)
+			
+			view.whenLayerView(geojsonLayer).then(
+			  function (evt) {
+			    // const effect = new FeatureEffect({
+			    //   filter: {
+			    //     where: "pop2000 >= 50000000"
+			    //   },
+			    //   includedEffect: "bloom(150%, 1px, 0.2) saturate(200%)",
+			    //   excludedEffect: "blur(1px) brightness(65%)"
+			    // });
+			    // evt.effect = effect;
+			
+			  }
+			);
+			view.on("click", function () {
+			
+			  //第一步，设定符号
+			  const less35 = {
+			    type: "simple-fill", // autocasts as new SimpleFillSymbol()
+			    color: "#fffcd4",
+			    style: "solid",
+			    outline: {
+			      width: 0.2,
+			      color: [255, 255, 255, 0.5]
+			    }
+			  };
+			
+			  const less50 = {
+			    type: "simple-fill", // autocasts as new SimpleFillSymbol()
+			    color: "#b1cdc2",
+			    style: "solid",
+			    outline: {
+			      width: 0.2,
+			      color: [255, 255, 255, 0.5]
+			    }
+			  };
+			
+			  const more50 = {
+			    type: "simple-fill", // autocasts as new SimpleFillSymbol()
+			    color: "#38627a",
+			    style: "solid",
+			    outline: {
+			      width: 0.2,
+			      color: [255, 255, 255, 0.5]
+			    }
+			  };
+			
+			  const more75 = {
+			    type: "simple-fill", // autocasts as new SimpleFillSymbol()
+			    color: "#0d2644",
+			    style: "solid",
+			    outline: {
+			      width: 0.2,
+			      color: [255, 255, 255, 0.5]
+			    }
+			  };
+			
+			  // 第二步，指定渲染器
+			  const renderer = {
+			    type: "simple", // autocasts as new SimpleRenderer()
+			    symbol: {
+			      type: "simple-fill", // autocasts as new SimpleFillSymbol()
+			      outline: {
+			        // makes the outlines of all features consistently light gray
+			        color: "lightgray",
+			        width: 0.5
+			      }
+			    },
+			    visualVariables: [
+			      {
+			        type: "color", // indicates this is a color visual variable
+			        field: "liangshi", // total population in poverty
+			        stops: [
+			          {
+			            value: 1000000, // features where < 10% of the pop in poverty
+			            color: "#f7f8d8", // will be assigned this color (beige)
+			            label: "100万" // label to display in the legend
+			          },
+			          {
+			            value: 2000000, // features where > 30% of the pop in poverty
+			            color: "#af589d", // will be assigned this color (purple)
+			            label: "200万" // label to display in the legend
+			          }
+			        ]
+			      }
+			    ]
+			  };
+			
+			
+			
+			
+			  geojsonLayer.renderer = renderer;
+			
+			});
+        });
+    </script>
+    <div id="viewDiv"></div>
+</body>
+ 
+</html>
